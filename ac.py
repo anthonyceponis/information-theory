@@ -23,6 +23,8 @@ class ArithmeticCoder:
             self.decoder_cum_probs.append((lower, upper))
             lower = upper
 
+        print(self.decoder_symbols)
+
     def encode(self, msg: str) -> str:
         msg = self._delimit(msg)
         u_i = 0.0
