@@ -1,8 +1,9 @@
 from collections import Counter
 
+
 class ArithmeticCoder:
     def __init__(self, reference_msg: str, delimit=True):
-        self.delimit = delimit
+        self.delimit = delimit  # set to false to see why the delimiter requirement makes this scheme bad in practise.
         self.delimiter = "#"
         self.eps = 1e-8
 
