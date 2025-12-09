@@ -6,7 +6,6 @@ class ArithmeticCoder:
         self.delimit = delimit
         self.delimiter = "#"
         self.eps = 1e-8
-        # self.delimiter = ""
 
         reference_msg = self._delimit(reference_msg)
         counts = dict(Counter(reference_msg))
@@ -67,13 +66,10 @@ class ArithmeticCoder:
         curr_v = self._bitstream_to_float(msg)
 
         decoded_msg = ""
-        current_decoder_cum_probs = self.decoder_cum_probs[:]
 
         while True:
             curr_range = h - l
-            symbol, (prob_low, prob_high) = self._decode_symbol(
-                curr_v, l, curr_range, current_decoder_cum_probs
-            )
+            symbol, (prob_low, prob_high) = self._decode_symbol(curr_v, l, curr_range)
 
             print(prob_low, prob_high, symbol)
             decoded_msg += symbol
@@ -106,13 +102,12 @@ class ArithmeticCoder:
         f: float,
         low: float,
         curr_range: float,
-        current_decoder_cum_probs: list[tuple[float, float]],
     ) -> tuple[str, tuple[float, float]]:
-        l, r = 0, len(current_decoder_cum_probs)
+        l, r = 0, len(self.decoder_cum_probs)
 
         while l < r:
             m = (l + r) // 2
-            middle = low + current_decoder_cum_probs[m][0] * curr_range
+            middle = low + self.decoder_cum_probs[m][0] * curr_range
 
             if middle <= f:
                 l = m + 1
@@ -120,7 +115,7 @@ class ArithmeticCoder:
                 r = m
         l -= 1
         symbol = self.decoder_symbols[l]
-        prob_low, prob_high = current_decoder_cum_probs[l]
+        prob_low, prob_high = self.decoder_cum_probs[l]
 
         prob_high = low + prob_high * curr_range - self.eps
         prob_low = low + prob_low * curr_range
