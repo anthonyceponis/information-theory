@@ -1,6 +1,5 @@
 from collections import Counter
 
-
 class ArithmeticCoder:
     def __init__(self, reference_msg: str, delimit=True):
         self.delimit = delimit
